@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object({
   username: yup
@@ -28,48 +29,56 @@ const schema = yup.object({
 });
 
 export default function RegisterForm() {
-const [apiError, setApiError] = useState(null);
-const [succes, setSucces] = useState(null);
-const [isFormSubbmitting, setisFormSubbmitting] = useState(null);
+  const [apiError, setApiError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data) => {
-    setApiError(null)
-    setSucces(null)
-    setisFormSubbmitting(true)
+    setApiError(null);
+    setSuccess(false);
+    setIsFormSubmitting(true);
+
     try {
       const response = await axios.post(
         "https://fakestoreapi.com/users",
         data
       );
-      if (response) {
-        setSucces(true);
+      if (response.status === 200 || response.status === 201) {
+        setSuccess(true);
         reset();
-      }
-      setisFormSubbmitting(false);
-    } catch (e) {
-      if (e.status === 401){
-        setApiError(
-            "Dane logowania są niepoprawne lub użytkownik nie istnieje"
-        );
+        navigate("/login", { state: { fromRegister: true} });
       } else {
-        setApiError("Wystąpił nieznany błąd")
+        setApiError("Wystąpił nieoczekiwany błąd serwera.");
       }
-      setisFormSubbmitting(false);
+    } catch (e) {
+      if (e.response && e.response.status === 401) {
+        setApiError("Dane logowania są niepoprawne lub użytkownik nie istnieje");
+      } else {
+        setApiError("Wystąpił nieznany błąd");
+      }
+    } finally {
+      setIsFormSubmitting(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-10">
       <h1>Rejestracja</h1>
-      {apiError && <span>{apiError}</span>}
-      {succes && <span>Sukces</span>}
+
+      {apiError && <span className="text-red-500">{apiError}</span>}
+      {success && <span className="text-green-500">Rejestracja zakończona sukcesem!</span>}
+
       <div className="flex flex-col">
         <label>Username</label>
         <input
@@ -120,7 +129,11 @@ const [isFormSubbmitting, setisFormSubbmitting] = useState(null);
         )}
       </div>
 
-      <button type="submit" className="btn btn-primary" disabled={isSubmitting || isFormSubbmitting}>
+      <button
+        type="submit"
+        className="btn btn-primary"
+        disabled={isSubmitting || isFormSubmitting}
+      >
         Zarejestruj
       </button>
     </form>
