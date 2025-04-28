@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import useSWR from "swr";
+import Layout from "../Layout";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -23,19 +24,18 @@ const ProductDetails = () => {
   }
 
   return (
-    <>
+    <Layout>
       <h2>{data.title}</h2>
       <p>{data.description}</p>
       <p>{data.price} zł</p>
       <img src={data.image} alt={data.title} />
-
       <button
         onClick={() => navigate(-1)}
         className="mt-4 p-2 bg-blue-500 text-white rounded"
       >
         Wstecz
       </button>
-    </>
+    </Layout>
   );
 };
 
