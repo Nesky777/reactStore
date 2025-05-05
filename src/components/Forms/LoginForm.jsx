@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 
 const yupSchema = yup.object().shape({
@@ -38,7 +39,8 @@ export default function LoginForm({fromRegister = false}) {
         data
       );
 
-      if (response && response.data && response.data.token) {
+      if (response.data.token) {
+        login(response.data.token, response.data);
         setSuccess(true);
         reset();
         navigate("/products", {
