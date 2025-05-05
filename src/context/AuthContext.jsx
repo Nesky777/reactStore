@@ -1,17 +1,29 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useReducer } from "react";
+import { authReducer, initialState } from "./AuthReducer";
+import { AUTH_ACTIONS } from "./AuthReducer";
+
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
-const [user, setUser] = useState(null);
-const [token, setToken] = useState(null);
+// const [user, setUser] = useState(null);
+// const [token, setToken] = useState(null);
+const [state, dispatch] = useReducer(authReducer, initialState);
 
 useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
     const storedUser = JSON.parse(localStorage.getItem("userData"));
     if (storedToken && storedUser){
-        setToken(storedToken);
-        setUser(storedUser);
+        dispatch({
+            type: AUTH_ACTIONS.LOAD_USER_FROM_STORAGE,
+            payload: {
+                token: storedToken,
+                user: storedUser
+            }
+        });
+        // dispatch({})
+        // setToken(storedToken);
+        // setUser(storedUser);
     }
 }, []);
 
@@ -29,7 +41,15 @@ const logout = () => {
 };
 
 return (
-    <AuthContext.Provider value={{ user, token, login, logout}}>
+    <AuthContext.Provider value={{ 
+        // user, token, login, logout
+        user: state.user,
+        token: state.token,
+        isLoading: state.isLoading,
+        error: state.error,
+        login,
+        logout
+        }}>
     {children}
     </AuthContext.Provider>
 );

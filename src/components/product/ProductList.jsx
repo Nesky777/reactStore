@@ -2,7 +2,7 @@ import ProductCard from "./ProductCard.jsx";
 import styles from "../../styles/ProductList.module.css";
 import useSWR from "swr";
 import { fetcher } from "../../untils/fetch.js";
-import { Link } from "react-router-dom"; // Dodajemy Link z react-router-dom
+import { Link } from "react-router-dom"; 
 
 const ProductList = () => {
   const { data, error, isLoading } = useSWR(
