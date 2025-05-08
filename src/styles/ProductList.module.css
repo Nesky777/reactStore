@@ -1,5 +1,10 @@
-.container{
-        display: "flex";
-        flex-direction: column;
-        gap: 5;
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 5;
+}
+
+/* Testowy style => do atrybutu className w jsx */
+.test {
+  background-color: aquamarine;
 }

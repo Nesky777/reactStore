@@ -1,29 +1,16 @@
 import ProductList from "../components/product/ProductList";
-import { Link, useLocation } from "react-router-dom";
-import Layout from "../components/Layout";
-import { Navigate } from "react-router-dom";
-import useAuth from "../components/hooks/useAuth";
+import { useLocation } from "react-router-dom";
 
-export default function Products() {
-  const { user } = useAuth();
-  // if (!user) return <Navigate to ="/login" replace />;
-  return <ProductList />
-}
+const ProductsPage = () => {
+  const location = useLocation();
+  const fromLogin = location?.state?.fromLogin;
 
-// const ProductPage = () => {
-//   const location = useLocation();
-//   const fromLogin = location?.state?.fromLogin;
+  return (
+    <>
+      {fromLogin && <span className="text-green-600 font-medium mb-4 block">Logowanie się powiodło</span>}
+      <ProductList />
+    </>
+  );
+};
 
-//   return (
-//     <Layout>
-//       {fromLogin && (
-//         <span className="text-green-500">
-//           Logowanie się powiodło, możesz przeglądać produkty
-//         </span>
-//       )}
-//       <ProductList />
-//     </Layout>
-//   );
-// };
-
-// export default ProductPage;
+export default ProductsPage;

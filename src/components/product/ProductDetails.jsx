@@ -1,43 +1,42 @@
-import { useParams, useNavigate } from "react-router-dom";
 import useSWR from "swr";
-import Layout from "../Layout";
+import { fetcher } from "../../utils/fetch";
+import useCart from "../../hooks/useCart";
 
-const ProductDetails = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
+const ProductDetails = ({ id }) => {
   const { data, error, isLoading } = useSWR(
     `https://fakestoreapi.com/products/${id}`,
-    (url) => fetch(url).then((res) => res.json())
+    fetcher
   );
 
-  if (isLoading) {
-    return <p>Trwa ładowanie...</p>;
-  }
+  const { cartItems, addToCart, removeFromCart } = useCart();
 
-  if (error) {
-    return <p>Wystąpił błąd</p>;
-  }
+  const isInCart = cartItems.some((item) => item.id === data?.id);
 
-  if (!data) {
-    return <p>Produkt nie znaleziony</p>;
-  }
+  const handleCartAction = () => {
+    if (isInCart) {
+      removeFromCart(data.id);
+    } else {
+      addToCart(data);
+    }
+  };
+
+  if (isLoading) return <span>Trwa pobieranie danych produktu</span>;
+  if (error) return <span>Wystąpił błąd</span>;
 
   return (
-    <Layout>
-      <h2>{data.title}</h2>
+    <div className="max-w-3xl mx-auto p-6 space-y-4">
+      <h2 className="text-2xl font-bold">{data.title}</h2>
+      <img src={data.image} alt={data.title} className="w-64 h-auto" />
+      <p className="text-gray-600">{data.category}</p>
       <p>{data.description}</p>
-      <p>{data.price} zł</p>
-      <img src={data.image} alt={data.title} />
       <button
-        onClick={() => navigate(-1)}
-        className="mt-4 p-2 bg-blue-500 text-white rounded"
+        onClick={handleCartAction}
+        className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
       >
-        Wstecz
+        {isInCart ? "Usuń z koszyka" : "Dodaj do koszyka"}
       </button>
-    </Layout>
+    </div>
   );
 };
 
 export default ProductDetails;
-
