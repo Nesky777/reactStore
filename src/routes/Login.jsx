@@ -5,11 +5,9 @@ import { useEffect, useState } from "react";
 
 const LoginPage = () => {
   const location = useLocation();
-  // console.log(location);
   const fromRegister = location?.state?.fromRegister;
   const { user } = useAuth();
   const navigate = useNavigate();
-  console.log(user, "here");
 
   useEffect(() => {
     if (user) navigate("/products", {});

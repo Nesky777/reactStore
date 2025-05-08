@@ -1,9 +1,12 @@
-import { createContext, useState, useEffect } from "react";
+import { useMemo, createContext, useState, useEffect, useCallback } from "react";
+import ProductList from "../components/product/ProductList";
 
 export const CartContext = createContext();
 
+
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+
 
   // Ładowanie koszyka z localStorage przy inicjalizacji
   useEffect(() => {
@@ -17,6 +20,10 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
+
+const cartSum = useMemo(() => {
+  return cartItems.reduce((total, item) => total + item.price, 0);
+}, [cartItems]);
 
   const addToCart = (product) => {
     setCartItems([...cartItems, product]);
@@ -32,7 +39,7 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart }}
+      value={{ cartItems, addToCart, removeFromCart, clearCart, cartSum, setCartItems}}
     >
       {children}
     </CartContext.Provider>

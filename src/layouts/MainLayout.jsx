@@ -5,8 +5,7 @@ import Cart from "../routes/Cart"
 
 const MainLayout = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const { cartItems } = useCart();
+  const { cartItems, cartSum } = useCart();
 
   const handleLogout = () => {
     logout(); // wyloguj użytkownika
@@ -15,6 +14,7 @@ const MainLayout = () => {
 
   return (
     <>
+    <p>Przedmioty w koszyku: {cartItems?.length} | Cena całkowita: {cartSum}zł</p>
       <div className="w-full bg-gray-800 text-white p-4 flex justify-between items-center">
         <div className="text-lg font-medium">To jest nagłówek strony</div>
         <div className="flex gap-4">
