@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import useCart from "../../hooks/useCart";
+import { Product } from "../../types/product"
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product }: {product: Product}) => {
   const { cartItems, addToCart, removeFromCart } = useCart();
 
-  const isInCart = cartItems.some((item) => item.id === product.id);
+  const isInCart = cartItems.some((item: Product) => item.id === product.id);
 
   const handleCartAction = () => {
     if (isInCart) {
@@ -21,6 +22,7 @@ const ProductCard = ({ product }) => {
         <img src={product.image} width="300" alt={product.title} />
         <p>{product.price.toFixed(2)} zł</p>
       </Link>
+      <span>{product.category}</span>
       <button
         onClick={handleCartAction}
         className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded"

@@ -120,22 +120,26 @@
 
 // export default ProductList;
 
+import { useMemo, useState, ChangeEvent } from "react";
 import ProductCard from "./ProductCard";
-import styles from "../../styles/ProductList.module.css";
-import { useMemo, useState } from "react";
+// import styles from "../../styles/ProductList.module.css";
 import useProducts from "../../hooks/useProducts";
-import useCategories from "../../hooks/useCategories"; 
+import useCategories from "../../hooks/useCategories";
+import { Product } from "@/types/product";
+
+// Typ unii dla opcji sortowania
+type SortUnion = "none" | "price_asc" | "price_desc";
 
 const ProductList = () => {
-  const { data: products, error, isLoading } = useProducts();
+  const { data: products, error, isLoading } = useProducts(); 
   const categories = useCategories(products); 
-  const [sortOption, setSortOption] = useState("none");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOption, setSortOption] = useState<SortUnion>("none");
+  const [minPrice, setMinPrice] = useState<string>("");
+  const [maxPrice, setMaxPrice] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const filteredAndSortedProducts = useMemo(() => {
+  const filteredAndSortedProducts = useMemo<Product[]>(() => {
     if (!products) return [];
 
     let filtered = [...products];
@@ -180,7 +184,9 @@ const ProductList = () => {
       <div className="flex flex-col sm:flex-row flex-wrap items-start gap-4 mb-4">
         <select
           value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            setSortOption(e.target.value as SortUnion)
+          }
           className="p-2 border rounded-md"
         >
           <option value="none">Brak sortowania</option>
@@ -192,23 +198,29 @@ const ProductList = () => {
           type="number"
           placeholder="Cena minimalna"
           value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setMinPrice(e.target.value)
+          }
           className="p-2 border rounded-md"
         />
         <input
           type="number"
           placeholder="Cena maksymalna"
           value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setMaxPrice(e.target.value)
+          }
           className="p-2 border rounded-md"
         />
 
         <select
           value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            setSelectedCategory(e.target.value)
+          }
           className="p-2 border rounded-md"
         >
-          {categories.map((cat) => (
+          {categories.map((cat: string) => (
             <option key={cat} value={cat}>
               {cat === "all" ? "Wszystkie kategorie" : cat}
             </option>
@@ -219,7 +231,9 @@ const ProductList = () => {
           type="text"
           placeholder="Szukaj produktu..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setSearchTerm(e.target.value)
+          }
           className="p-2 border rounded-md flex-1"
         />
       </div>

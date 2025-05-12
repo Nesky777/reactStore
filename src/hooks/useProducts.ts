@@ -1,8 +1,10 @@
 import useSWR from "swr";
 import { fetcher } from "../utils/fetch";
+import { ApiResponse } from "@/types/api";
+import { Product } from "@/types/product";
 
 export const useProducts = () => {
-    const {data, error, isLoading} = useSWR(
+    const {data, error, isLoading}: ApiResponse<Product[]> = useSWR(
         "https://fakestoreapi.com/products",
         fetcher
     )
@@ -14,6 +16,5 @@ export const useProducts = () => {
 };
  
 };
-
 
 export default useProducts;
