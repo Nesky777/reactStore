@@ -1,7 +1,7 @@
 import LoginForm from "../components/forms/LoginForm";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const LoginPage = () => {
   const location = useLocation();

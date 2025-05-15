@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import authReducer, { initialState } from "../reducers/AuthReducer";
 import { AUTH_ACTIONS } from "../reducers/AuthReducer";
 
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       });
     }
   };
-
+☺
   // Funkcja wylogowująca
   const logout = () => {
     localStorage.removeItem("authToken");

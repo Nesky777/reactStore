@@ -1,7 +1,7 @@
 import RegisterForm from "../components/forms/RegisterForm";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 
 const RegisterPage = () => {
   const { user } = useAuth();

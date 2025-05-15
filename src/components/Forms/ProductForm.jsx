@@ -15,8 +15,7 @@ export default function ProductForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch,
+    // watch,
   } = useForm({
     resolver: yupResolver(yupSchema),
   });
@@ -35,7 +34,7 @@ export default function ProductForm() {
     }
   };
 
-  const currentPassword = watch("password");
+  // const currentPassword = watch("password");
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="speca-y-4 mt-10">
       <h1>Dodaj produkt</h1>

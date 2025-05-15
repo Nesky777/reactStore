@@ -1,7 +1,7 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, navigate} from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
-import Cart from "../routes/Cart"
+// import Cart from "../routes/Cart"
 
 const MainLayout = () => {
   const { user, logout } = useAuth();
